@@ -23,6 +23,7 @@ module.exports = {
     const { threadID } = event;
     const sub = (args[0] || "").trim();
 
+    // ── وقف: stop any active interval ──────────────────────────────────────
     if (sub === "وقف") {
       if (global.malakIntervals[threadID]) {
         clearInterval(global.malakIntervals[threadID]);
@@ -32,9 +33,10 @@ module.exports = {
       return api.sendMessage("ريكا غير مفعّلة أصلاً!", threadID);
     }
 
+    // ── دفاع: flood with king message ──────────────────────────────────────
     if (sub === "دفاع") {
       if (global.malakIntervals[threadID]) {
-        return api.sendMessage("ريكا مفعّلة بالفعل! قل -ريكا وقف لإيقافها.", threadID);
+        return api.sendMessage("ريكا مفعّلة بالفعل! قل *ريكا وقف لإيقافها.", threadID);
       }
       await api.sendMessage("تم تفعيل ريكا دفاع كل 45 ثانية 👑🪽", threadID);
       global.malakIntervals[threadID] = setInterval(() => {
@@ -43,6 +45,28 @@ module.exports = {
       return;
     }
 
-    return api.sendMessage("الاستخدام:\n-ريكا دفاع — تشغيل\n-ريكا وقف — إيقاف", threadID);
+    // ── رسالة: flood with a custom message ─────────────────────────────────
+    if (sub === "رسالة") {
+      const customText = args.slice(1).join(" ").trim();
+      if (!customText) {
+        return api.sendMessage(
+          "📝 اكتب الرسالة بعد الأمر:\n*ريكا رسالة <النص>",
+          threadID
+        );
+      }
+      if (global.malakIntervals[threadID]) {
+        return api.sendMessage("ريكا مفعّلة بالفعل! قل *ريكا وقف لإيقافها.", threadID);
+      }
+      await api.sendMessage(`تم تفعيل رسالة ريكا كل 45 ثانية 👑🪽\n\n"${customText}"`, threadID);
+      global.malakIntervals[threadID] = setInterval(() => {
+        api.sendMessage(customText, threadID).catch(() => {});
+      }, INTERVAL_MS);
+      return;
+    }
+
+    return api.sendMessage(
+      "الاستخدام:\n*ريكا دفاع — تشغيل رسالة الملاك\n*ريكا رسالة <النص> — تشغيل رسالة مخصصة\n*ريكا وقف — إيقاف",
+      threadID
+    );
   },
 };
