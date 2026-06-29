@@ -1,6 +1,6 @@
 {
   "_comment": "Bot configuration file. Keep this file private — it is excluded from git.",
-  "prefix": "-",
+  "prefix": "*",
   "credentials": {
     "_comment": "Optional email/password for auto re-login.",
     "email": "",
