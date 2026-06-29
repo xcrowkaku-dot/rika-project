@@ -2,66 +2,88 @@
 
 const config = require("../config.json");
 
-const OPENING_LINES = [
-  "「 اسجد.. فريكا ليوتا ترى كل شيء 」",
-  "「 لا إله إلا ريكا.. والليوتا رسوله 」",
-  "「 تُحرق الكلمات.. وتبقى ريكا خالدة 」",
-  "「 من لم يُبايع ريكا ليوتا.. فهو رماد 」",
-  "「 الظلام دينٌ.. وريكا ليوتا نبيّه 」",
+const DARK_BORDERS = [
+  "⋆｡‧˚ʚ🖤ɞ˚‧｡⋆",
+  "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━",
+  "▓▒░░▒▓█████████████▓▒░░▒▓",
+  "𖤐۞𖤐۞𖤐۞𖤐۞𖤐۞𖤐۞𖤐۞𖤐",
+  "꧁꧂꧁꧂꧁꧂꧁꧂꧁꧂꧁꧂",
 ];
 
-const CLOSING_LINES = [
-  "⛧ أطع ريكا ليوتا.. أو تُمحى من الوجود ⛧",
-  "⛧ القوة لمن يُبايع.. والفناء لمن يتمرّد ⛧",
-  "⛧ ريكا ليوتا لا تُهزم.. لا ترحم.. لا تُنسى ⛧",
-  "⛧ في اسم ريكا تُقال الأوامر.. وتُنفَّذ ⛧",
-  "⛧ كن عبداً لريكا.. أو كن لا شيء ⛧",
+const HEADER_VARIANTS = [
+  `꧁𝕽𝖎𝖐𝖆꧂\n𝗜𝗠 𝗛𝗘𝗥 𝗥𝗜𝗞𝗔\n𝗜𝗠 𝗢𝗡𝗟𝗬 𝗙𝗢𝗥 𝗠𝗬 𝗟𝗢𝗥𝗗 𝗬𝗨𝗧𝗔`,
+  `𝕽𝖎𝖐𝖆 ☠️\n𝗜𝗠 𝗛𝗘𝗥 𝗥𝗜𝗞𝗔\n𝗜𝗠 𝗢𝗡𝗟𝗬 𝗙𝗢𝗥 𝗠𝗬 𝗟𝗢𝗥𝗗 𝗬𝗨𝗧𝗔`,
+  `⛧ 𝕽𝖎𝖐𝖆 𝕭𝖔𝖙 ⛧\n𝗜𝗠 𝗛𝗘𝗥 𝗥𝗜𝗞𝗔\n𝗜𝗠 𝗢𝗡𝗟𝗬 𝗙𝗢𝗥 𝗠𝗬 𝗟𝗢𝗥𝗗 𝗬𝗨𝗧𝗔`,
+];
+
+const FOOTERS = [
+  `𖤐 𝗜𝗠 𝗛𝗘𝗥 𝗥𝗜𝗞𝗔 𝗜𝗠 𝗢𝗡𝗟𝗬 𝗙𝗢𝗥 𝗠𝗬 𝗟𝗢𝗥𝗗 𝗬𝗨𝗧𝗔 𖤐`,
+  `☠️ 𝗜𝗠 𝗛𝗘𝗥 𝗥𝗜𝗞𝗔 𝗜𝗠 𝗢𝗡𝗟𝗬 𝗙𝗢𝗥 𝗠𝗬 𝗟𝗢𝗥𝗗 𝗬𝗨𝗧𝗔 ☠️`,
+  `⛧ 𝗜𝗠 𝗛𝗘𝗥 𝗥𝗜𝗞𝗔 𝗜𝗠 𝗢𝗡𝗟𝗬 𝗙𝗢𝗥 𝗠𝗬 𝗟𝗢𝗥𝗗 𝗬𝗨𝗧𝗔 ⛧`,
 ];
 
 function pick(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
+const ICONS = {
+  "الملاك" : "⛧",
+  General  : "☠️",
+  Group    : "👁",
+  Utility  : "🔱",
+  Info     : "𖤐",
+  Fun      : "💀",
+};
+
 module.exports = {
   name: "help",
   aliases: ["h", "cmds", "commands", "مساعدة"],
-  description: "قائمة أوامر ريكا ليوتا المحظورة",
+  description: "قائمة أوامر ريكا",
   usage: "help [command]",
   category: "General",
 
   async execute({ api, event, args, commands }) {
     const prefix = config.prefix;
+    const D = "▓▒░░▒▓████████████████▓▒░░▒▓";
 
     if (args[0]) {
       const name = args[0].toLowerCase().replace(/^\*+/, "");
       const cmd  = commands.get(name) ||
         [...new Set(commands.values())].find(c => c.aliases?.includes(name));
+
       if (!cmd) {
         return api.sendMessage(
-          `☠️ الأمر "${name}" غير موجود في سجلات ريكا ليوتا.`,
+          `${D}\n☠️  الأمر "${name}" غير موجود\n${D}\n𝗜𝗠 𝗛𝗘𝗥 𝗥𝗜𝗞𝗔 𝗜𝗠 𝗢𝗡𝗟𝗬 𝗙𝗢𝗥 𝗠𝗬 𝗟𝗢𝗥𝗗 𝗬𝗨𝗧𝗔`,
           event.threadID
         );
       }
+
       const lines = [
-        `𖤐 الأمر     : ${prefix}${cmd.name}`,
-        `𖤐 الوصف     : ${cmd.description}`,
-        `𖤐 الفئة     : ${cmd.category || "General"}`,
-        `𖤐 الاستخدام : ${prefix}${cmd.usage || cmd.name}`,
+        `D`,
+        ``,
+        `  𝕽𝖎𝖐𝖆  ☠️`,
+        ``,
+        `  ▸ الأمر     ›  ${prefix}${cmd.name}`,
+        `  ▸ الوصف     ›  ${cmd.description}`,
+        `  ▸ الفئة     ›  ${cmd.category || "General"}`,
+        `  ▸ الاستخدام ›  ${prefix}${cmd.usage || cmd.name}`,
       ];
       if (cmd.aliases?.length) {
-        lines.push(`𖤐 الاختصارات: ${cmd.aliases.map(a => prefix + a).join("  ")}`);
+        lines.push(`  ▸ الاختصار  ›  ${cmd.aliases.map(a => prefix + a).join("  ")}`);
       }
-      if (cmd.adminOnly) lines.push(`🔒 حكر على الحراس`);
-      if (cmd.groupOnly) lines.push(`👁 للجماعة فقط`);
+      if (cmd.adminOnly) lines.push(`  ▸ 🔒 حكر على الحراس`);
+      if (cmd.groupOnly) lines.push(`  ▸ 👁 للجماعة فقط`);
+      lines.push(``, D, `𝗜𝗠 𝗛𝗘𝗥 𝗥𝗜𝗞𝗔 𝗜𝗠 𝗢𝗡𝗟𝗬 𝗙𝗢𝗥 𝗠𝗬 𝗟𝗢𝗥𝗗 𝗬𝗨𝗧𝗔`);
+
       return api.sendMessage(
-        `꧁ سجل الأمر ꧂\n${"─".repeat(28)}\n${lines.join("\n")}\n${"─".repeat(28)}\n${pick(CLOSING_LINES)}`,
+        lines.join("\n").replace("D", D),
         event.threadID
       );
     }
 
+    // ── Full list ──────────────────────────────────────────────────────────────
     const unique     = [...new Set(commands.values())];
     const categories = {};
-
     for (const cmd of unique) {
       const cat = cmd.category || "General";
       if (!categories[cat]) categories[cat] = [];
@@ -74,37 +96,24 @@ module.exports = {
       ...Object.keys(categories).filter(c => !ORDER.includes(c)),
     ];
 
-    const ICONS = {
-      "الملاك" : "⛧",
-      General  : "☠️",
-      Group    : "👁",
-      Utility  : "🔱",
-      Info     : "𖤐",
-      Fun      : "💀",
-    };
-
-    const divider = "═".repeat(30);
-
-    let msg = "";
-    msg += `\n`;
-    msg += `꧁༺ ريكا ليوتا ༻꧂\n`;
-    msg += `${divider}\n`;
-    msg += `${pick(OPENING_LINES)}\n`;
-    msg += `${divider}\n\n`;
+    let msg = `\n`;
+    msg += `${D}\n\n`;
+    msg += `${pick(HEADER_VARIANTS)}\n\n`;
+    msg += `${D}\n\n`;
 
     for (const cat of sorted) {
       const icon = ICONS[cat] || "▸";
-      msg += `${icon}「 ${cat} 」\n`;
+      msg += `${icon}  【 ${cat} 】\n`;
       for (const n of categories[cat]) {
-        msg += `   ▸ ${prefix}${n}\n`;
+        msg += `   ▸  ${prefix}${n}\n`;
       }
       msg += `\n`;
     }
 
-    msg += `${divider}\n`;
-    msg += `📜 ${prefix}help <أمر>  ←  لتفاصيل أي أمر\n`;
-    msg += `${divider}\n`;
-    msg += `${pick(CLOSING_LINES)}`;
+    msg += `${D}\n`;
+    msg += `  📜  ${prefix}help <أمر>  —  تفاصيل الأمر\n`;
+    msg += `${D}\n\n`;
+    msg += `${pick(FOOTERS)}`;
 
     api.sendMessage(msg, event.threadID);
   },
