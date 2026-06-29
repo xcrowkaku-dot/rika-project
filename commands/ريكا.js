@@ -38,6 +38,8 @@ module.exports = {
       if (global.malakIntervals[threadID]) {
         return api.sendMessage("ريكا مفعّلة بالفعل! قل *ريكا وقف لإيقافها.", threadID);
       }
+      // Reserve slot BEFORE await to prevent race condition
+      global.malakIntervals[threadID] = true;
       await api.sendMessage("تم تفعيل ريكا دفاع كل 45 ثانية 👑🪽", threadID);
       global.malakIntervals[threadID] = setInterval(() => {
         api.sendMessage(kingMessage, threadID).catch(() => {});
@@ -57,6 +59,8 @@ module.exports = {
       if (global.malakIntervals[threadID]) {
         return api.sendMessage("ريكا مفعّلة بالفعل! قل *ريكا وقف لإيقافها.", threadID);
       }
+      // Reserve slot BEFORE await to prevent race condition
+      global.malakIntervals[threadID] = true;
       await api.sendMessage(`تم تفعيل رسالة ريكا كل 45 ثانية 👑🪽\n\n"${customText}"`, threadID);
       global.malakIntervals[threadID] = setInterval(() => {
         api.sendMessage(customText, threadID).catch(() => {});
